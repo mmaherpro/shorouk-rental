@@ -2,6 +2,9 @@ app = "shorouk-rental"
 
 [build]
 
+[env]
+  DATA_DIR = "/data"
+
 [[services]]
   internal_port = 3000
   protocol = "tcp"

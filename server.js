@@ -7,7 +7,8 @@ app.use(express.json({ limit: '100mb' }));
 // ===== DATABASE (sql.js) =====
 const initSqlJs = require('sql.js');
 let db;
-const dbPath = path.join(process.env.DATA_DIR || __dirname, 'shorouk_online.db');
+const dataDir = process.env.DATA_DIR || (fs.existsSync('/data') ? '/data' : __dirname);
+const dbPath = path.join(dataDir, 'shorouk_online.db');
 
 async function initDb() {
   const SQL = await initSqlJs({ locateFile: () => path.join(__dirname, 'node_modules', 'sql.js', 'dist', 'sql-wasm.wasm') });
