@@ -1,0 +1,4 @@
+node_modules/
+shorouk_online.db
+*.bat
+dist/

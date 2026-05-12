@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مكتب الإيجارات - قرية شاطئ الشروق</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sea:#0a4f6e;--sea-mid:#0d6e96;--sea-light:#1a9bc9;
+  --sand:#e8c98a;--sand-light:#f5e4be;--sun:#f0a500;--sun-bright:#ffcc44;
+  --white:#fff;--foam:#eaf7ff;--dark:#06202e;--text:#0d3346;
+  --shadow:rgba(10,79,110,0.18);--card-bg:rgba(255,255,255,0.97);
+  --input-border:#b0d9ed;--success:#1a9b6c;--error:#c0392b;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Cairo',sans-serif;background:var(--sea);min-height:100vh;color:var(--text);overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 20% 80%,rgba(26,155,201,.35) 0%,transparent 60%),radial-gradient(ellipse at 80% 20%,rgba(10,79,110,.6) 0%,transparent 55%),linear-gradient(160deg,#062d40 0%,#0a4f6e 40%,#0d7a9e 75%,#1a9bc9 100%);z-index:0;}
+
+/* LOGIN */
+#loginPage{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;}
+.login-card{background:rgba(255,255,255,0.97);border-radius:26px;box-shadow:0 12px 60px rgba(10,79,110,0.35);padding:44px 40px 36px;width:100%;max-width:420px;animation:fadeUp .6s ease both;border:1.5px solid rgba(26,155,201,.15);text-align:center;}
+.login-logo{font-size:56px;animation:float 3.5s ease-in-out infinite;margin-bottom:8px;}
+.login-title{font-family:'Tajawal',sans-serif;font-size:1.9rem;font-weight:900;color:var(--sea);margin-bottom:4px;}
+.login-sub{font-size:.9rem;color:var(--sea-mid);margin-bottom:28px;}
+.login-divider{width:60px;height:3px;background:linear-gradient(90deg,transparent,var(--sun),transparent);border-radius:2px;margin:0 auto 24px;}
+.role-tabs{display:flex;gap:10px;margin-bottom:22px;background:var(--foam);border-radius:12px;padding:5px;}
+.role-tab{flex:1;padding:9px;border:none;border-radius:9px;font-family:'Cairo',sans-serif;font-size:.9rem;font-weight:700;cursor:pointer;background:transparent;color:var(--sea-mid);transition:all .2s;}
+.role-tab.active{background:var(--sea);color:#fff;box-shadow:0 2px 10px rgba(10,79,110,.25);}
+.login-field{margin-bottom:16px;text-align:right;}
+.login-field label{display:block;font-size:.85rem;font-weight:700;color:var(--sea);margin-bottom:6px;}
+.login-field input{width:100%;padding:12px 14px;border:1.8px solid var(--input-border);border-radius:10px;font-family:'Cairo',sans-serif;font-size:.97rem;background:var(--foam);color:var(--dark);outline:none;transition:border-color .2s;}
+.login-field input:focus{border-color:var(--sea-light);background:#fff;}
+.btn-login{width:100%;padding:14px;font-family:'Tajawal',sans-serif;font-size:1.1rem;font-weight:800;border:none;border-radius:12px;cursor:pointer;background:linear-gradient(135deg,var(--sea),var(--sea-light));color:#fff;box-shadow:0 5px 22px rgba(10,79,110,.28);transition:transform .18s;}
+.btn-login:hover{transform:translateY(-2px);}
+.login-error{color:var(--error);font-size:.85rem;margin-top:10px;display:none;}
+
+/* APP */
+#appPage{display:none;position:relative;z-index:1;}
+.page-wrap{max-width:980px;margin:0 auto;padding:30px 18px 60px;}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;animation:fadeDown .6s ease both;flex-wrap:wrap;gap:12px;}
+.topbar-left{display:flex;align-items:center;gap:14px;}
+.topbar-logo{font-size:40px;}
+.topbar-title h1{font-family:'Tajawal',sans-serif;font-size:1.6rem;font-weight:900;color:var(--sand-light);line-height:1.2;}
+.topbar-title p{font-size:.82rem;color:var(--sea-light);}
+.topbar-right{display:flex;align-items:center;gap:10px;}
+.role-badge{background:rgba(255,255,255,.18);color:#fff;font-size:.82rem;font-weight:700;padding:5px 14px;border-radius:30px;backdrop-filter:blur(4px);}
+.user-badge{background:rgba(240,165,0,.25);color:var(--sand-light);font-size:.8rem;font-weight:700;padding:5px 14px;border-radius:30px;}
+.btn-logout{background:rgba(192,57,43,.85);color:#fff;border:none;border-radius:10px;padding:7px 16px;font-family:'Cairo',sans-serif;font-size:.85rem;font-weight:700;cursor:pointer;}
+.btn-logout:hover{background:var(--error);}
+.nav-tabs{display:flex;gap:8px;margin-bottom:22px;flex-wrap:wrap;}
+.nav-tab{padding:10px 22px;border:none;border-radius:12px;font-family:'Cairo',sans-serif;font-size:.9rem;font-weight:700;cursor:pointer;background:rgba(255,255,255,.15);color:rgba(255,255,255,.8);transition:all .2s;backdrop-filter:blur(4px);}
+.nav-tab.active{background:rgba(255,255,255,.97);color:var(--sea);box-shadow:0 4px 18px rgba(10,79,110,.2);}
+
+.card{background:var(--card-bg);border-radius:22px;box-shadow:0 8px 48px var(--shadow);padding:28px 30px 24px;animation:fadeUp .7s ease .15s both;border:1.5px solid rgba(26,155,201,.13);margin-bottom:22px;}
+.section-title{font-family:'Tajawal',sans-serif;font-size:1.05rem;font-weight:800;color:var(--sea);margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid var(--foam);display:flex;align-items:center;gap:10px;}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px 20px;margin-bottom:18px;}
+.form-group{display:flex;flex-direction:column;gap:5px;}
+.form-group.full{grid-column:1/-1;}
+label{font-size:.85rem;font-weight:700;color:var(--sea);}
+input,select,textarea{font-family:'Cairo',sans-serif;font-size:.93rem;padding:9px 12px;border:1.8px solid var(--input-border);border-radius:10px;background:var(--foam);color:var(--dark);transition:border-color .2s;outline:none;width:100%;}
+input:focus,select:focus,textarea:focus{border-color:var(--sea-light);background:#fff;}
+select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%230a4f6e' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:left 10px center;padding-left:32px;}
+
+/* Tenant count */
+.tenant-count-bar{display:flex;align-items:center;gap:14px;background:var(--foam);border-radius:12px;padding:12px 16px;margin-bottom:14px;border:1.8px solid var(--input-border);}
+.count-controls{display:flex;align-items:center;gap:10px;}
+.count-btn{width:32px;height:32px;border-radius:50%;border:2px solid var(--sea-light);background:#fff;color:var(--sea);font-size:1.2rem;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.count-btn:hover{background:var(--sea);color:#fff;}
+.count-num{font-size:1.3rem;font-weight:900;color:var(--sea);min-width:28px;text-align:center;}
+.tenant-names-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:9px;margin-bottom:4px;}
+.tenant-name-item{display:flex;flex-direction:column;gap:4px;}
+.tenant-name-item label{font-size:.76rem;font-weight:700;color:var(--sea-mid);}
+.tenant-name-item input{font-size:.87rem;padding:7px 10px;}
+
+/* Photo upload */
+.photo-upload-area{border:2px dashed var(--input-border);border-radius:12px;padding:16px;text-align:center;background:var(--foam);cursor:pointer;position:relative;}
+.photo-upload-area:hover{border-color:var(--sea-light);background:#e0f3fb;}
+.photo-upload-area input[type="file"]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;padding:0;border:none;background:none;}
+.upload-icon{font-size:2rem;}
+.upload-text{font-size:.9rem;color:var(--sea-mid);font-weight:600;}
+.upload-sub{font-size:.76rem;color:#888;margin-top:2px;}
+#photoPreview{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px;}
+.preview-item{position:relative;width:84px;height:84px;border-radius:10px;overflow:hidden;border:2px solid var(--sea-light);}
+.preview-item img{width:100%;height:100%;object-fit:cover;}
+.preview-item .remove-btn{position:absolute;top:3px;left:3px;background:rgba(192,57,43,.85);color:#fff;border:none;border-radius:50%;width:20px;height:20px;font-size:.7rem;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.preview-item .photo-lbl{position:absolute;bottom:0;left:0;right:0;background:rgba(10,79,110,.7);color:#fff;font-size:.58rem;padding:2px 4px;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+
+.btn-submit{width:100%;padding:13px;font-family:'Tajawal',sans-serif;font-size:1.1rem;font-weight:800;border:none;border-radius:14px;cursor:pointer;background:linear-gradient(135deg,var(--sea),var(--sea-light));color:#fff;box-shadow:0 5px 22px rgba(10,79,110,.28);transition:transform .18s;margin-top:4px;}
+.btn-submit:hover{transform:translateY(-2px);}
+
+/* Records */
+.records-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px;}
+.records-count{background:var(--sea);color:#fff;font-size:.8rem;font-weight:700;padding:4px 14px;border-radius:50px;}
+.search-row{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;}
+.search-row input,.search-row select{flex:1;min-width:160px;padding:8px 12px;border:1.8px solid var(--input-border);border-radius:10px;font-family:'Cairo',sans-serif;font-size:.88rem;background:var(--foam);outline:none;}
+.search-row input:focus,.search-row select:focus{border-color:var(--sea-light);}
+.no-records{text-align:center;padding:28px;color:#aaa;font-size:.9rem;}
+
+/* Daily Log */
+.day-selector{display:flex;gap:10px;align-items:center;margin-bottom:18px;flex-wrap:wrap;}
+.day-selector label{font-weight:700;color:var(--sea);font-size:.9rem;}
+.day-selector input[type="date"]{width:auto;flex:1;min-width:180px;}
+.day-log-area{min-height:120px;}
+.day-entry{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;border-radius:10px;background:var(--foam);border:1.5px solid var(--input-border);margin-bottom:10px;}
+.day-entry-time{font-size:.75rem;color:#888;white-space:nowrap;margin-top:2px;}
+.day-entry-text{font-size:.9rem;color:var(--dark);flex:1;}
+.day-entry-del{background:none;border:none;color:#c0392b;cursor:pointer;font-size:1rem;padding:2px 6px;border-radius:6px;}
+.day-entry-del:hover{background:#fde8e8;}
+.add-entry-row{display:flex;gap:10px;margin-top:8px;}
+.add-entry-row textarea{flex:1;min-height:60px;resize:vertical;font-size:.9rem;}
+.btn-add-entry{padding:8px 18px;font-family:'Cairo',sans-serif;font-size:.9rem;font-weight:700;border:none;border-radius:10px;cursor:pointer;background:var(--sea);color:#fff;white-space:nowrap;align-self:flex-end;}
+
+table{width:100%;border-collapse:separate;border-spacing:0;font-size:.83rem;}
+thead th{background:var(--sea);color:#fff;padding:8px 10px;font-weight:700;text-align:right;font-size:.78rem;}
+thead th:first-child{border-radius:0 10px 0 0;}
+thead th:last-child{border-radius:10px 0 0 0;}
+tbody tr:nth-child(even){background:var(--foam);}
+tbody tr:hover{background:#d6effa;}
+tbody td{padding:7px 10px;border-bottom:1px solid #e4f2f9;color:var(--dark);vertical-align:middle;}
+.unit-badge{display:inline-block;padding:2px 9px;border-radius:30px;font-size:.76rem;font-weight:700;}
+.badge-villa{background:#fdebd0;color:#a04000;}
+.badge-chalet{background:#d5f5e3;color:#1a6c40;}
+.badge-apt{background:#d6eaf8;color:#1a5276;}
+.btn-dl{background:linear-gradient(135deg,var(--sun),var(--sun-bright));color:var(--dark);border:none;border-radius:7px;padding:4px 10px;font-family:'Cairo',sans-serif;font-size:.78rem;font-weight:700;cursor:pointer;white-space:nowrap;}
+.btn-del{background:#fde8e8;color:var(--error);border:1.5px solid #f5b7b1;border-radius:7px;padding:4px 8px;font-family:'Cairo',sans-serif;font-size:.78rem;font-weight:700;cursor:pointer;}
+.btn-del:hover{background:var(--error);color:#fff;}
+
+/* Admin */
+.admin-stat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-bottom:20px;}
+.stat-card{background:linear-gradient(135deg,var(--sea),var(--sea-mid));color:#fff;border-radius:14px;padding:18px 14px;text-align:center;box-shadow:0 4px 18px rgba(10,79,110,.22);}
+.stat-card .stat-num{font-size:2rem;font-weight:900;font-family:'Tajawal',sans-serif;}
+.stat-card .stat-lbl{font-size:.8rem;opacity:.85;margin-top:3px;}
+.stat-card.gold{background:linear-gradient(135deg,var(--sun),var(--sun-bright));color:var(--dark);}
+.stat-card.green{background:linear-gradient(135deg,#1a9b6c,#27ae8f);}
+
+/* Staff management */
+.staff-list{margin-bottom:18px;}
+.staff-item{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-radius:12px;background:var(--foam);border:1.5px solid var(--input-border);margin-bottom:8px;flex-wrap:wrap;gap:8px;}
+.staff-info strong{color:var(--sea);font-size:.95rem;}
+.staff-info span{font-size:.8rem;color:#888;display:block;}
+.staff-actions{display:flex;gap:8px;}
+.btn-edit-pw{padding:6px 14px;font-family:'Cairo',sans-serif;font-size:.82rem;font-weight:700;border:none;border-radius:8px;cursor:pointer;background:var(--sea-light);color:#fff;}
+.btn-del-staff{padding:6px 12px;font-family:'Cairo',sans-serif;font-size:.82rem;font-weight:700;border:1.5px solid #f5b7b1;border-radius:8px;cursor:pointer;background:#fde8e8;color:var(--error);}
+.btn-del-staff:hover{background:var(--error);color:#fff;}
+.add-staff-box{background:#f0faff;border-radius:14px;padding:18px;border:1.5px solid var(--input-border);margin-top:12px;}
+.add-staff-box h3{font-size:.95rem;font-weight:800;color:var(--sea);margin-bottom:14px;}
+.staff-form-row{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;}
+.staff-form-row .form-group{flex:1;min-width:150px;}
+.btn-add-staff{padding:9px 20px;font-family:'Cairo',sans-serif;font-size:.9rem;font-weight:700;border:none;border-radius:10px;cursor:pointer;background:var(--sea);color:#fff;height:40px;align-self:flex-end;}
+
+/* Modal */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(6,32,46,.6);z-index:2000;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(3px);}
+.modal-overlay.open{display:flex;}
+.modal{background:#fff;border-radius:18px;padding:28px 28px 22px;width:100%;max-width:380px;box-shadow:0 10px 50px rgba(10,79,110,.3);}
+.modal h3{font-family:'Tajawal',sans-serif;font-size:1.2rem;font-weight:900;color:var(--sea);margin-bottom:18px;}
+.modal .form-group{margin-bottom:14px;}
+.modal-btns{display:flex;gap:10px;justify-content:flex-end;margin-top:18px;}
+.btn-modal-ok{padding:9px 22px;font-family:'Cairo',sans-serif;font-size:.9rem;font-weight:700;border:none;border-radius:10px;cursor:pointer;background:var(--sea);color:#fff;}
+.btn-modal-cancel{padding:9px 18px;font-family:'Cairo',sans-serif;font-size:.9rem;font-weight:700;border:1.5px solid var(--input-border);border-radius:10px;cursor:pointer;background:var(--foam);color:var(--sea);}
+
+#toast{position:fixed;top:24px;left:50%;transform:translateX(-50%) translateY(-80px);background:var(--success);color:#fff;font-family:'Cairo',sans-serif;font-size:.93rem;font-weight:700;padding:12px 26px;border-radius:50px;box-shadow:0 5px 24px rgba(0,0,0,.2);z-index:9999;transition:transform .4s cubic-bezier(.34,1.56,.64,1);min-width:240px;text-align:center;}
+#toast.show{transform:translateX(-50%) translateY(0);}
+#toast.error-t{background:var(--error);}
+#printCardArea{display:none;}
+
+@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+@keyframes fadeDown{from{opacity:0;transform:translateY(-22px);}to{opacity:1;transform:translateY(0);}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px);}to{opacity:1;transform:translateY(0);}}
+/* Card */
+.btn-card{background:linear-gradient(135deg,#8e44ad,#9b59b6);color:#fff;border:none;border-radius:7px;padding:4px 9px;font-family:'Cairo',sans-serif;font-size:.76rem;font-weight:700;cursor:pointer;white-space:nowrap;}
+
+/* Card Print */
+.card-page{width:85.6mm;height:54mm;margin:0 auto;background:#fff;direction:rtl;position:relative;overflow:hidden;font-family:'Cairo',sans-serif;}
+.card-page .card-head{background:#1a1a1a;color:#fff;padding:1.2mm 2mm;text-align:center;}
+.card-page .card-head .office-name{font-size:3.8mm;font-weight:900;letter-spacing:0.3px;}
+.card-page .card-body{padding:1.2mm 2.5mm 0;}
+.card-page .info-row{display:flex;align-items:center;padding:0.4mm 0;border-bottom:0.3px solid #eaf0f5;min-height:3.8mm;}
+.card-page .info-row .lbl{font-size:2.2mm;color:#888;font-weight:600;min-width:16mm;}
+.card-page .info-row .val{font-size:2.8mm;font-weight:800;color:#0d3346;}
+.card-page .tenant-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.2mm 3mm;margin:0.4mm 0;}
+.card-page .tenant-item{font-size:2.8mm;font-weight:700;color:#0d3346;padding:0.2mm 0;display:flex;align-items:center;gap:2px;}
+.card-page .tenant-item .num-badge{background:#0a4f6e;color:#fff;border-radius:50%;width:3mm;height:3mm;display:inline-flex;align-items:center;justify-content:center;font-size:1.8mm;font-weight:900;flex-shrink:0;}
+.card-page .owner-row{display:flex;align-items:center;gap:3px;padding:0.3mm 0;border-top:0.5px solid #e8f0f5;margin-top:0.3mm;}
+.card-page .owner-row .lbl{font-size:2.2mm;color:#888;font-weight:600;}
+.card-page .owner-row .val{font-size:2.8mm;font-weight:900;color:#1a6b3c;}
+.card-page .until-grid-item{font-size:2.8mm;font-weight:900;color:#0d3346;padding:0.4mm 0;display:flex;align-items:center;gap:3px;}
+
+/* Daily Review */
+.daily-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:18px;}
+.daily-stat{background:linear-gradient(135deg,var(--sea),var(--sea-mid));color:#fff;border-radius:14px;padding:16px 12px;text-align:center;box-shadow:0 4px 18px rgba(10,79,110,.22);}
+.daily-stat .stat-num{font-size:1.8rem;font-weight:900;font-family:'Tajawal',sans-serif;}
+.daily-stat .stat-lbl{font-size:.78rem;opacity:.85;margin-top:2px;}
+.daily-stat.gold{background:linear-gradient(135deg,var(--sun),var(--sun-bright));color:var(--dark);}
+.daily-stat.green{background:linear-gradient(135deg,#1a9b6c,#27ae8f);}
+.daily-stat.purple{background:linear-gradient(135deg,#6c3483,#8e44ad);}
+.daily-stat.red{background:linear-gradient(135deg,#c0392b,#e74c3c);}
+.daily-table-wrap{overflow-x:auto;margin-bottom:14px;}
+.daily-table-wrap table{font-size:.82rem;}
+.daily-table-wrap th{background:var(--sea);color:#fff;padding:7px 8px;font-weight:700;text-align:center;font-size:.75rem;}
+.daily-table-wrap th:first-child{border-radius:0 8px 0 0;}
+.daily-table-wrap th:last-child{border-radius:8px 0 0 0;}
+.daily-table-wrap td{padding:6px 8px;text-align:center;border-bottom:1px solid #e4f2f9;color:var(--dark);}
+.daily-table-wrap .num-cell{direction:ltr;font-weight:700;}
+.daily-table-wrap .price-cell{direction:ltr;font-weight:800;color:var(--success);}
+.daily-table-wrap .price-cell.red{color:var(--error);}
+.daily-total-row{background:var(--sea)!important;color:#fff!important;font-weight:900;}
+.daily-total-row td{color:#fff!important;font-size:.88rem!important;}
+.daily-total-box{background:var(--sea);color:#fff;border-radius:14px;padding:16px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-top:8px;}
+.daily-total-box .total-item{text-align:center;}
+.daily-total-box .total-item .lbl{font-size:.8rem;opacity:.85;}
+.daily-total-box .total-item .val{font-size:1.6rem;font-weight:900;font-family:'Tajawal',sans-serif;}
+.daily-total-box .total-item .val.gold{color:var(--sun-bright);}
+.daily-notes-area{min-height:auto;}
+
+@media print{
+  @page{size:85.6mm 54mm;margin:0;}
+  body *{visibility:hidden;}
+  #printCardArea,#printCardArea *{visibility:visible;}
+  #printCardArea{display:block!important;position:fixed;top:0;left:0;width:85.6mm;height:54mm;margin:0;padding:0;}
+  .card-overlay{display:none!important;}
+}
+@media(max-width:600px){
+  .card{padding:16px 12px;}
+  .form-grid{grid-template-columns:1fr;}
+  table{font-size:.72rem;}
+  tbody td,thead th{padding:5px 5px;}
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginPage">
+  <div class="login-card">
+    <div class="login-logo">🏖️</div>
+    <div class="login-title">قرية شاطئ الشروق</div>
+    <div class="login-sub">مكتب الإيجارات — نظام الدخول</div>
+    <div class="login-divider"></div>
+    <div class="role-tabs">
+      <button class="role-tab active" onclick="setRole('staff')">👷 موظف</button>
+      <button class="role-tab" onclick="setRole('admin')">🔐 مدير</button>
+    </div>
+    <div class="login-field"><label>اسم المستخدم</label><input type="text" id="loginUser" placeholder="أدخل اسم المستخدم" disabled></div>
+    <div class="login-field"><label>كلمة المرور</label><input type="password" id="loginPass" placeholder="أدخل كلمة المرور" onkeydown="if(event.key==='Enter')doLogin()" disabled></div>
+    <div class="login-error" id="loginError">❌ بيانات الدخول غير صحيحة</div>
+    <br>
+    <button class="btn-login" onclick="doLogin()" disabled>دخول ←</button>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="appPage">
+  <div class="page-wrap">
+    <div class="topbar">
+      <div class="topbar-left">
+        <div class="topbar-logo">🏖️</div>
+        <div class="topbar-title">
+          <h1>قرية شاطئ الشروق</h1>
+          <p>مكتب الإيجارات</p>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <span class="user-badge" id="userBadge"></span>
+        <span class="role-badge" id="roleBadge"></span>
+        <button class="btn-logout" onclick="logout()">خروج ⏎</button>
+      </div>
+    </div>
+    <div class="nav-tabs">
+      <button class="nav-tab active" onclick="showTab('bookingTab',this)">📋 حجز جديد</button>
+      <button class="nav-tab" onclick="showTab('recordsTab',this)">🗂️ الحجوزات</button>
+      <button class="nav-tab" id="dailyTabBtn" style="display:none" onclick="showTab('dailyTab',this)">📅 يومية المكتب</button>
+      <button class="nav-tab" id="adminTabBtn" style="display:none" onclick="showTab('adminTab',this)">⚙️ لوحة المدير</button>
+    </div>
+
+    <!-- BOOKING TAB -->
+    <div id="bookingTab">
+      <div class="card">
+        <div class="section-title"><span>📋</span> نموذج حجز وحدة جديدة</div>
+        <div class="form-grid">
+          <div class="form-group"><label>🏠 نوع الوحدة</label>
+            <select id="unitType"><option value="">-- اختر --</option><option value="فيلا">🏡 فيلا</option><option value="شاليه">🌴 شاليه</option><option value="شقة">🏢 شقة</option></select>
+          </div>
+          <div class="form-group"><label>🔢 رقم الوحدة</label><input type="text" id="unitNum" placeholder="مثال: A-105"></div>
+          <div class="form-group"><label>👤 اسم المؤجر</label><input type="text" id="ownerName" placeholder="الاسم الكامل"></div>
+          <div class="form-group"><label>📞 هاتف التواصل</label><input type="text" id="tenantPhone" placeholder="01xxxxxxxxx"></div>
+          <div class="form-group"><label>📅 تاريخ بداية الإيجار</label><input type="date" id="startDate"></div>
+          <div class="form-group"><label>📅 تاريخ نهاية الحجز</label><input type="date" id="endDate"></div>
+        </div>
+        <div class="section-title"><span>👥</span> أسماء المستأجرين</div>
+        <div class="tenant-count-bar">
+          <label>عدد المستأجرين:</label>
+          <div class="count-controls">
+            <button class="count-btn" onclick="changeTenantCount(-1)">−</button>
+            <span class="count-num" id="tenantCountDisplay">1</span>
+            <button class="count-btn" onclick="changeTenantCount(1)">+</button>
+          </div>
+          <span style="font-size:.78rem;color:#888;margin-right:8px">الحد الأقصى 25</span>
+        </div>
+        <div class="tenant-names-grid" id="tenantNamesGrid"></div>
+        <div class="section-title" style="margin-top:18px"><span>🪪</span> صور بطاقات المستأجرين</div>
+        <div class="photo-upload-area">
+          <input type="file" id="photoInput" accept="image/*" multiple onchange="handlePhotos(this)">
+          <div class="upload-icon">📎</div>
+          <div class="upload-text">اضغط لرفع صور البطاقات</div>
+          <div class="upload-sub">يمكنك رفع أكثر من صورة · JPG, PNG</div>
+        </div>
+        <div id="photoPreview"></div>
+        <div style="display:flex;align-items:center;gap:14px;margin:12px 0 6px;flex-wrap:wrap">
+          <div class="form-group" style="flex-direction:row;align-items:center;gap:8px;margin:0">
+            <label style="margin:0">🪪 كارنيهات إضافية</label>
+            <input type="number" id="extraCards" value="0" min="0" style="width:70px">
+          </div>
+          <span style="font-size:.78rem;color:#888">كل 5 مستأجرين = كارنية واحد تلقائياً</span>
+        </div>
+        <br>
+        <button class="btn-submit" onclick="saveBooking()">💾 حفظ الحجز وتنزيل الملف</button>
+      </div>
+    </div>
+
+    <!-- RECORDS TAB -->
+    <div id="recordsTab" style="display:none">
+      <div class="card">
+        <div class="records-header">
+          <div class="section-title" style="margin:0;border:none;padding:0"><span>🗂️</span> سجل الحجوزات</div>
+          <span class="records-count" id="countBadge">0 حجز</span>
+        </div>
+        <div class="search-row">
+          <input type="text" id="searchInput" placeholder="🔍 ابحث بالاسم أو رقم الوحدة أو الهاتف..." oninput="renderTable()">
+          <select id="filterType" onchange="renderTable()">
+            <option value="">كل الأنواع</option>
+            <option value="فيلا">فيلا</option>
+            <option value="شاليه">شاليه</option>
+            <option value="شقة">شقة</option>
+          </select>
+          <input type="date" id="filterDate" onchange="renderTable()" title="تصفية بتاريخ البداية">
+        </div>
+        <div id="recordsContainer"><div class="no-records">لا توجد حجوزات</div></div>
+      </div>
+    </div>
+
+    <!-- DAILY TAB -->
+    <div id="dailyTab" style="display:none">
+      <div class="card" style="padding-bottom:18px">
+        <div class="section-title"><span>📅</span> يومية مكتب الإيجارات — مراجعة يومية</div>
+        <div class="day-selector">
+          <label>اختر اليوم:</label>
+          <input type="date" id="logDatePicker" onchange="renderDayLog()">
+          <button style="padding:8px 16px;font-family:'Cairo',sans-serif;font-size:.85rem;font-weight:700;border:none;border-radius:8px;cursor:pointer;background:var(--sea-light);color:#fff;" onclick="goToday()">اليوم</button>
+        </div>
+        <div id="dailyStatsArea" class="daily-summary"></div>
+        <div id="dailyDetails"></div>
+        <div style="margin-top:18px;padding-top:14px;border-top:2px solid var(--foam)">
+          <div class="section-title" style="margin-bottom:10px"><span>📝</span> ملاحظات اليوم</div>
+          <div class="day-log-area daily-notes-area" id="dayLogArea"><div class="no-records">لا توجد ملاحظات</div></div>
+          <div class="add-entry-row">
+            <textarea id="newEntryText" placeholder="أضف ملاحظة أو قيد لهذا اليوم..." style="min-height:50px"></textarea>
+            <button class="btn-add-entry" onclick="addDayEntry()">➕ إضافة</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ADMIN TAB -->
+    <div id="adminTab" style="display:none">
+      <div class="card">
+        <div class="section-title"><span>📊</span> إحصائيات</div>
+        <div class="admin-stat-grid" id="adminStats"></div>
+      </div>
+      <div class="card">
+        <div class="section-title"><span>👷</span> إدارة حسابات الموظفين</div>
+        <div class="staff-list" id="staffList"></div>
+        <div class="add-staff-box">
+          <h3>➕ إضافة حساب موظف جديد</h3>
+          <div class="staff-form-row">
+            <div class="form-group"><label>اسم المستخدم</label><input type="text" id="newStaffUser" placeholder="username"></div>
+            <div class="form-group"><label>كلمة المرور</label><input type="password" id="newStaffPass" placeholder="password"></div>
+            <div class="form-group"><label>الاسم الكامل</label><input type="text" id="newStaffName" placeholder="اسم الموظف"></div>
+            <button class="btn-add-staff" onclick="addStaff()">إضافة</button>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="section-title"><span>🔑</span> تغيير كلمة مرور المدير</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;">
+          <div class="form-group" style="flex:1;min-width:200px"><label>كلمة المرور الجديدة</label><input type="password" id="newAdminPw" placeholder="كلمة مرور جديدة"></div>
+          <button style="padding:9px 22px;font-family:'Cairo',sans-serif;font-size:.9rem;font-weight:700;border:none;border-radius:10px;cursor:pointer;background:var(--sea);color:#fff;height:40px;" onclick="changeAdminPw()">حفظ</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="section-title"><span>🗑️</span> جميع الحجوزات (مع الحذف)</div>
+        <div id="adminRecords"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Change PW Modal -->
+<div class="modal-overlay" id="pwModal">
+  <div class="modal">
+    <h3>🔑 تغيير كلمة مرور الموظف</h3>
+    <div class="form-group"><label>اسم المستخدم</label><input type="text" id="modalStaffUser" readonly style="background:#f0f0f0"></div>
+    <div class="form-group"><label>كلمة المرور الجديدة</label><input type="password" id="modalNewPw" placeholder="كلمة مرور جديدة"></div>
+    <div class="modal-btns">
+      <button class="btn-modal-cancel" onclick="closePwModal()">إلغاء</button>
+      <button class="btn-modal-ok" onclick="saveStaffPw()">حفظ</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<div id="printCardArea"></div>
+
+<!-- Card Modal -->
+<div class="modal-overlay card-overlay" id="cardModal" onclick="if(event.target===this)closeCardModal()">
+  <div class="modal" style="max-width:520px">
+    <h3 style="display:flex;align-items:center;gap:8px"><span>🪪</span> كارنية المستأجر</h3>
+    <div id="cardPreviewArea"></div>
+    <div class="modal-btns">
+      <button class="btn-modal-cancel" onclick="closeCardModal()">إغلاق</button>
+      <button class="btn-modal-ok" onclick="printCard()">🖨️ طباعة</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== API =====
+async function apiGet(path) {
+  try { const r = await fetch('/api' + path); return r.ok ? r.json() : null; } catch(e) { return null; }
+}
+async function apiPost(path, body) {
+  const r = await fetch('/api' + path, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) });
+  return r.json();
+}
+async function apiPut(path, body) {
+  const r = await fetch('/api' + path, { method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) });
+  return r.json();
+}
+async function apiDel(path) {
+  const r = await fetch('/api' + path, { method:'DELETE' });
+  return r.json();
+}
+
+// ===== DATA =====
+let adminCreds = null;
+let staffList  = [];
+let bookings   = [];
+let currentRole= null;
+let currentUser= null;
+let selectedRole='staff';
+let dataLoaded = false;
+
+async function initApp(){
+  try { adminCreds = await apiGet('/settings/admin'); } catch(e) {}
+  try { staffList = await apiGet('/staff'); if(!staffList) staffList = []; } catch(e) { staffList = []; }
+  try { bookings = await apiGet('/bookings'); if(!bookings) bookings = []; } catch(e) { bookings = []; }
+  dataLoaded = true;
+  if (!adminCreds) {
+    adminCreds = {user:'admin', pass:'', name:'المدير'};
+    document.getElementById('loginError').textContent = '🔐 هذه أول مرة — أدخل كلمة مرور للمدير';
+    document.getElementById('loginError').style.display = 'block';
+    document.getElementById('loginPass').placeholder = 'اختر كلمة مرور المدير';
+    var origLogin = doLogin;
+    doLogin = function(){
+      var u = document.getElementById('loginUser').value.trim();
+      var p = document.getElementById('loginPass').value.trim();
+      if (selectedRole === 'admin' && !adminCreds.pass) {
+        if (!p || p.length < 4) {
+          document.getElementById('loginError').textContent = '⚠️ كلمة المرور يجب أن تكون 4 أحرف على الأقل';
+          document.getElementById('loginError').style.display = 'block';
+          setTimeout(function(){document.getElementById('loginError').style.display='none';}, 3000);
+          return;
+        }
+        if (u !== 'admin') {
+          document.getElementById('loginError').textContent = '⚠️ اسم المستخدم يجب أن يكون admin';
+          document.getElementById('loginError').style.display = 'block';
+          setTimeout(function(){document.getElementById('loginError').style.display='none';}, 3000);
+          return;
+        }
+        adminCreds.pass = p;
+        apiPost('/settings/admin', adminCreds).then(function(){ return apiGet('/settings/admin'); }).then(function(c){ adminCreds = c; });
+        document.getElementById('loginError').textContent = '✅ تم تعيين كلمة المرور! سجل دخولك';
+        document.getElementById('loginError').style.display = 'block';
+        document.getElementById('loginPass').placeholder = 'كلمة المرور';
+        setTimeout(function(){document.getElementById('loginError').style.display='none';}, 3000);
+        return;
+      }
+      origLogin();
+    };
+  }
+  document.getElementById('loginUser').disabled = false;
+  document.getElementById('loginPass').disabled = false;
+  document.querySelector('.btn-login').disabled = false;
+}
+initApp();
+
+// ===== AUTH =====
+function setRole(r){
+  selectedRole=r;
+  document.querySelectorAll('.role-tab').forEach((t,i)=>t.classList.toggle('active',(r==='staff'&&i===0)||(r==='admin'&&i===1)));
+}
+
+function doLogin(){
+  if(!dataLoaded){showToast('⚠️ جاري تحميل البيانات...',true);return;}
+  const u=document.getElementById('loginUser').value.trim();
+  const p=document.getElementById('loginPass').value.trim();
+
+  if (selectedRole==='admin') {
+    if (!adminCreds) {
+      document.getElementById('loginError').textContent = '❌ لم يتم تعيين كلمة مرور المدير بعد';
+      document.getElementById('loginError').style.display='block';
+      setTimeout(()=>document.getElementById('loginError').style.display='none', 3000);
+      return;
+    }
+    if (u===adminCreds.user && p===adminCreds.pass) {
+      currentRole='admin'; currentUser=adminCreds.name||'المدير';
+      enterApp();
+      return;
+    }
+  } else if (selectedRole==='staff') {
+    const s=staffList.find(x=>x.username===u&&x.password===p);
+    if(s){currentRole='staff';currentUser=s.name||u;enterApp();return;}
+  }
+  document.getElementById('loginError').style.display='block';
+  setTimeout(()=>document.getElementById('loginError').style.display='none',2500);
+}
+
+function enterApp(){
+  document.getElementById('loginPage').style.display='none';
+  document.getElementById('appPage').style.display='block';
+  document.getElementById('roleBadge').textContent=currentRole==='admin'?'🔐 مدير':'👷 موظف';
+  document.getElementById('userBadge').textContent='👤 '+currentUser;
+  document.getElementById('adminTabBtn').style.display=currentRole==='admin'?'':'none';
+  document.getElementById('dailyTabBtn').style.display=currentRole==='admin'?'':'none';
+  renderTable(); goToday();
+}
+
+function logout(){
+  currentRole=null; currentUser=null;
+  document.getElementById('appPage').style.display='none';
+  document.getElementById('loginPage').style.display='flex';
+  document.getElementById('loginUser').value='';
+  document.getElementById('loginPass').value='';
+}
+
+// ===== TABS =====
+function showTab(id,btn){
+  if(currentRole!=='admin'&&(id==='adminTab'||id==='dailyTab')){return;}
+  ['bookingTab','recordsTab','dailyTab','adminTab'].forEach(t=>{
+    const el=document.getElementById(t);
+    if(el) el.style.display=t===id?'block':'none';
+  });
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  if(id==='adminTab'){buildAdminStats();renderAdminStaff();renderAdminRecords();}
+  if(id==='recordsTab') renderTable();
+  if(id==='dailyTab') renderDayLog();
+}
+
+// ===== TENANT COUNT =====
+let tenantCount=1;
+function changeTenantCount(d){
+  tenantCount=Math.max(1,Math.min(25,tenantCount+d));
+  document.getElementById('tenantCountDisplay').textContent=tenantCount;
+  renderTenantFields();
+}
+function renderTenantFields(){
+  const grid=document.getElementById('tenantNamesGrid');
+  const existing=Array.from(grid.querySelectorAll('input')).map(i=>i.value);
+  grid.innerHTML='';
+  for(let i=0;i<tenantCount;i++){
+    const div=document.createElement('div');
+    div.className='tenant-name-item';
+    div.innerHTML='<label>المستأجر '+(i+1)+'</label><input type="text" id="tname_'+i+'" placeholder="الاسم الكامل" value="'+(existing[i]||'')+'">';
+    grid.appendChild(div);
+  }
+}
+renderTenantFields();
+
+// ===== PHOTOS =====
+let photoFiles=[];
+function handlePhotos(inp){
+  Array.from(inp.files).forEach(f=>{
+    if(!photoFiles.find(p=>p.name===f.name&&p.size===f.size)) photoFiles.push(f);
+  });
+  renderPhotoPreview();
+}
+function renderPhotoPreview(){
+  const c=document.getElementById('photoPreview');
+  c.innerHTML='';
+  photoFiles.forEach((f,i)=>{
+    const r=new FileReader();
+    r.onload=e=>{
+      const d=document.createElement('div');
+      d.className='preview-item';
+      d.innerHTML='<img src="'+e.target.result+'"><button class="remove-btn" onclick="removePhoto('+i+')">✕</button><div class="photo-lbl">'+f.name+'</div>';
+      c.appendChild(d);
+    };
+    r.readAsDataURL(f);
+  });
+}
+function removePhoto(i){photoFiles.splice(i,1);renderPhotoPreview();}
+
+// ===== BOOKING =====
+async function saveBooking(){
+  const unitType=document.getElementById('unitType').value.trim();
+  const unitNum=document.getElementById('unitNum').value.trim();
+  const ownerName=document.getElementById('ownerName').value.trim();
+  const tenantPhone=document.getElementById('tenantPhone').value.trim();
+  const startDate=document.getElementById('startDate').value;
+  const endDate=document.getElementById('endDate').value;
+  const names=[];
+  for(let i=0;i<tenantCount;i++){const inp=document.getElementById('tname_'+i);if(inp){const v=inp.value.trim();if(v)names.push(v);}}
+  if(!unitType||!unitNum||!ownerName||!tenantPhone||!startDate||!endDate){showToast('⚠️ يرجى تعبئة جميع الحقول',true);return;}
+  if(new Date(endDate)<new Date(startDate)){showToast('⚠️ تاريخ النهاية قبل البداية!',true);return;}
+  var dirHandle=null;
+  if(window.showDirectoryPicker){
+    try{dirHandle=await window.showDirectoryPicker({mode:'readwrite'});}
+    catch(e){}
+  }
+  const now=new Date();
+  const bookingDate=now.toLocaleDateString('ar-EG',{year:'numeric',month:'2-digit',day:'2-digit'});
+  const bookingTime=now.toLocaleTimeString('ar-EG',{hour:'2-digit',minute:'2-digit'});
+  const id='BK-'+Date.now();
+  const photos=[];
+  for(const f of photoFiles){
+    try {const b64=await fileToBase64(f);photos.push({name:f.name,data:b64});}
+    catch(e){showToast('⚠️ فشل قراءة إحدى الصور',true);}
+  }
+  const bk={id,unitType,unitNum,ownerName,tenantPhone,startDate,endDate,bookingDate,bookingTime,tenantNames:names,tenantCount:names.length,extraCards:parseInt(document.getElementById('extraCards').value)||0,createdAt:now.toISOString().slice(0,10),photos,registeredBy:currentUser};
+  bookings.unshift(bk);
+  await apiPost('/bookings', bk);
+  if(dirHandle){
+    await saveBookingToFolder(bk,photoFiles,dirHandle);
+  }else{
+    downloadBookingFile(bk);
+    showToast('✅ تم حفظ الحجز وتنزيل الملف!');
+  }
+  document.getElementById('unitType').value='';
+  document.getElementById('unitNum').value='';
+  document.getElementById('ownerName').value='';
+  document.getElementById('tenantPhone').value='';
+  document.getElementById('startDate').value='';
+  document.getElementById('endDate').value='';
+  tenantCount=1;document.getElementById('tenantCountDisplay').textContent='1';renderTenantFields();
+  photoFiles=[];document.getElementById('photoPreview').innerHTML='';document.getElementById('photoInput').value='';
+  document.getElementById('extraCards').value='0';
+}
+function fileToBase64(f){return new Promise((res,rej)=>{const r=new FileReader();r.onload=e=>res(e.target.result);r.onerror=()=>rej('err');r.readAsDataURL(f);});}
+
+// ===== HTML GENERATION =====
+function generateBookingHTML(b){
+  const namesHTML=b.tenantNames&&b.tenantNames.length
+    ?b.tenantNames.map(function(n,i){return '<div class="name-chip"><span class="chip-num">'+(i+1)+'</span>'+escapeHtml(n)+'</div>';}).join('')
+    :'<p style="color:#aaa">لم تُسجَّل أسماء</p>';
+  const photosHTML=b.photos&&b.photos.length
+    ?b.photos.map(function(p){return '<div class="id-photo" onclick="this.querySelector(\'img\').style.transform=this.querySelector(\'img\').style.transform===\'scale(2)\'?\'scale(1)\':\'scale(2)\'"><img src="'+p.data+'" alt="'+escapeHtml(p.name)+'"><div class="photo-name">'+escapeHtml(p.name)+'</div></div>';}).join('')
+    :'<p style="color:#aaa;padding:16px;text-align:center;">لا توجد صور بطاقات</p>';
+  return '<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><title>حجز '+escapeHtml(b.unitType)+' '+escapeHtml(b.unitNum)+'</title>'
+    +'<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">'
+    +'<style>body{font-family:\'Cairo\',sans-serif;background:#f0f8ff;margin:0;padding:24px;color:#0d3346;}.container{max-width:750px;margin:0 auto;background:#fff;border-radius:20px;box-shadow:0 4px 30px rgba(10,79,110,.13);overflow:hidden;}.header{background:linear-gradient(135deg,#0a4f6e,#1a9bc9);color:#fff;padding:26px 30px;text-align:center;}.header h1{font-size:1.6rem;font-weight:900;margin-bottom:4px;}.badge{display:inline-block;background:rgba(255,255,255,.2);border-radius:30px;padding:4px 16px;font-size:.83rem;margin-top:8px;}.body{padding:24px 30px;}.sec{font-size:1rem;font-weight:900;color:#0a4f6e;border-bottom:2px solid #eaf7ff;padding-bottom:8px;margin:16px 0 10px;}.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}.info-item label{font-size:.76rem;color:#888;display:block;margin-bottom:2px;}.info-item span{font-size:.95rem;font-weight:700;color:#06202e;}.names-wrap{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;}.name-chip{display:inline-flex;align-items:center;gap:7px;background:#eaf7ff;border:1.5px solid #b0d9ed;border-radius:30px;padding:5px 12px;font-size:.87rem;font-weight:700;color:#0a4f6e;}.chip-num{background:#0a4f6e;color:#fff;border-radius:50%;width:20px;height:20px;display:inline-flex;align-items:center;justify-content:center;font-size:.73rem;font-weight:900;flex-shrink:0;}.photos-grid{display:flex;flex-wrap:wrap;gap:12px;margin-top:8px;}.id-photo{border:2px solid #b0d9ed;border-radius:12px;overflow:hidden;width:165px;cursor:zoom-in;}.id-photo img{width:100%;height:115px;object-fit:cover;display:block;transition:transform .3s;}.photo-name{font-size:.7rem;padding:4px 8px;background:#eaf7ff;color:#0a4f6e;word-break:break-all;}.footer{background:#eaf7ff;padding:12px 30px;text-align:center;font-size:.78rem;color:#888;border-top:1px solid #d6eefc;}.print-btn{display:block;width:fit-content;margin:16px auto 0;padding:9px 26px;background:#0a4f6e;color:#fff;border:none;border-radius:10px;font-family:\'Cairo\',sans-serif;font-size:.93rem;font-weight:700;cursor:pointer;}@media print{.print-btn{display:none;}}</style>'
+    +'</head><body><div class="container">'
+    +'<div class="header"><h1>🏖️ قرية شاطئ الشروق — مكتب الإيجارات</h1><p>وثيقة حجز رسمية</p><div class="badge">رقم الحجز: '+escapeHtml(b.id)+'</div></div>'
+    +'<div class="body">'
+    +'<div class="sec">📋 بيانات الحجز</div>'
+    +'<div class="info-grid">'
+    +'<div class="info-item"><label>نوع الوحدة</label><span>'+escapeHtml(b.unitType)+'</span></div>'
+    +'<div class="info-item"><label>رقم الوحدة</label><span>'+escapeHtml(b.unitNum)+'</span></div>'
+    +'<div class="info-item"><label>اسم المؤجر</label><span>'+escapeHtml(b.ownerName)+'</span></div>'
+    +'<div class="info-item"><label>هاتف التواصل</label><span>'+escapeHtml(b.tenantPhone)+'</span></div>'
+    +'<div class="info-item"><label>بداية الإيجار</label><span>'+escapeHtml(b.startDate)+'</span></div>'
+    +'<div class="info-item"><label>نهاية الحجز</label><span>'+escapeHtml(b.endDate)+'</span></div>'
+    +'<div class="info-item"><label>تاريخ التسجيل</label><span>'+escapeHtml(b.bookingDate)+'</span></div>'
+    +'<div class="info-item"><label>سُجِّل بواسطة</label><span>'+escapeHtml(b.registeredBy||'—')+'</span></div>'
+    +'</div>'
+    +'<div class="sec">👥 أسماء المستأجرين ('+(b.tenantNames?b.tenantNames.length:0)+')</div>'
+    +'<div class="names-wrap">'+namesHTML+'</div>'
+    +'<div class="sec">🪪 بطاقات المستأجرين</div>'
+    +'<div class="photos-grid">'+photosHTML+'</div>'
+    +'</div>'
+    +'<div class="footer">تم الإصدار بتاريخ '+escapeHtml(b.bookingDate)+' — قرية شاطئ الشروق © 2025</div>'
+    +'</div>'
+    +'<button class="print-btn" onclick="window.print()">🖨️ طباعة / حفظ PDF</button>'
+    +'</body></html>';
+}
+
+// ===== DOWNLOAD & FOLDER SAVE =====
+function downloadBookingFile(b){
+  var fn='حجز_'+b.unitType+'_'+b.unitNum+'_'+(b.startDate||'').replace(/-/g,'')+'.html';
+  var html=generateBookingHTML(b);
+  const blob=new Blob([html],{type:'text/html;charset=utf-8'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=fn;a.click();URL.revokeObjectURL(a.href);
+}
+
+async function saveBookingToFolder(b,photoFilesList,dirHandle){
+  var fn=b.unitNum.replace(/[\\/:*?"<>|]/g,'_')+'_'+(b.startDate||'').replace(/-/g,'');
+  var subDir;
+  try{subDir=await dirHandle.getDirectoryHandle(fn,{create:true});}
+  catch(e){subDir=dirHandle;}
+  var html=generateBookingHTML(b);
+  var htmlFile=await subDir.getFileHandle('حجز_'+b.unitType+'_'+b.unitNum+'_'+(b.startDate||'').replace(/-/g,'')+'.html',{create:true});
+  var hw=await htmlFile.createWritable();
+  await hw.write(html);
+  await hw.close();
+  for(var i=0;i<photoFilesList.length;i++){
+    var pf=photoFilesList[i];
+    var safeName=('بطاقة_'+(i+1)+'_'+pf.name).replace(/[\\/:*?"<>|]/g,'_');
+    try{
+      var phf=await subDir.getFileHandle(safeName,{create:true});
+      var pw=await phf.createWritable();
+      await pw.write(pf);
+      await pw.close();
+    }catch(e){}
+  }
+  showToast('✅ تم حفظ الملفات في مجلد: '+fn);
+}
+
+function escapeHtml(s){
+  if(typeof s!=='string')return'';
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/'/g,'&#39;');
+}
+
+// ===== RECORDS TABLE =====
+function renderTable(){
+  const q=(document.getElementById('searchInput')?.value||'').toLowerCase();
+  const ft=document.getElementById('filterType')?.value||'';
+  const fd=document.getElementById('filterDate')?.value||'';
+  const filtered=bookings.filter(function(b){
+    const mq=!q||(b.unitNum||'').toLowerCase().includes(q)||(b.ownerName||'').toLowerCase().includes(q)||(b.tenantPhone||'').includes(q)||((b.tenantNames||[]).some(function(n){return n.toLowerCase().includes(q);}));
+    const mft=!ft||b.unitType===ft;
+    const mfd=!fd||b.startDate===fd;
+    return mq&&mft&&mfd;
+  });
+  document.getElementById('countBadge').textContent=bookings.length+' حجز';
+  const c=document.getElementById('recordsContainer');
+  if(!filtered.length){c.innerHTML='<div class="no-records">لا توجد نتائج</div>';return;}
+  const rows=filtered.map(function(b){
+    const bc=b.unitType==='فيلا'?'badge-villa':b.unitType==='شاليه'?'badge-chalet':'badge-apt';
+    const names=(b.tenantNames||[]).slice(0,2).join('، ')+(b.tenantNames?.length>2?'...':'');
+    const delBtn=currentRole==='admin'?'<button class="btn-del" onclick="deleteBooking(\''+b.id+'\')">🗑️</button>':'';
+    return '<tr><td><span class="unit-badge '+bc+'">'+b.unitType+'</span></td><td><strong>'+escapeHtml(b.unitNum)+'</strong></td><td>'+escapeHtml(b.ownerName)+'</td><td style="direction:ltr">'+escapeHtml(b.tenantPhone)+'</td><td style="font-size:.76rem">'+escapeHtml(names||'—')+'</td><td>'+b.startDate+'</td><td>'+b.endDate+'</td><td style="font-size:.76rem">'+(b.registeredBy||'—')+'</td><td style="white-space:nowrap"><button class="btn-dl" onclick=\'dlBook("'+b.id+'")\'>⬇️</button> <button class="btn-card" onclick="showPrintCard(\''+b.id+'\')">🪪</button> '+delBtn+'</td></tr>';
+  }).join('');
+  c.innerHTML='<div style="overflow-x:auto"><table><thead><tr><th>النوع</th><th>الوحدة</th><th>المؤجر</th><th>الهاتف</th><th>المستأجرون</th><th>البداية</th><th>النهاية</th><th>بواسطة</th><th>إجراء</th></tr></thead><tbody>'+rows+'</tbody></table></div>';
+}
+async function dlBook(id){
+  var b=bookings.find(function(x){return x.id===id;});
+  if(!b)return;
+  if(window.showDirectoryPicker){
+    try{
+      var dirHandle=await window.showDirectoryPicker({mode:'readwrite'});
+      var fileBlobs=[];
+      for(var i=0;i<(b.photos||[]).length;i++){
+        var p=b.photos[i];
+        try{
+          var resp=await fetch(p.data);
+          var blob=await resp.blob();
+          fileBlobs.push(new File([blob],p.name,{type:blob.type}));
+        }catch(e){}
+      }
+      await saveBookingToFolder(b,fileBlobs,dirHandle);
+      return;
+    }catch(e){if(e.name==='AbortError')return;}
+  }
+  downloadBookingFile(b);
+}
+async function deleteBooking(id){
+  if(!confirm('هل تريد حذف هذا الحجز؟'))return;
+  bookings=bookings.filter(function(b){return b.id!==id;});await apiDel('/bookings/'+id);
+  renderTable();buildAdminStats();renderAdminRecords();
+  showToast('🗑️ تم الحذف');
+}
+
+// ===== CARD PRINT =====
+function showPrintCard(id){
+  var b=bookings.find(function(x){return x.id===id;});
+  if(!b){showToast('⚠️ الحجز غير موجود',true);return;}
+  var namesHTML='';
+  if(b.tenantNames&&b.tenantNames.length){
+    var cols=[[],[]];
+    for(var i=0;i<b.tenantNames.length;i++){
+      cols[i<3?0:1].push(b.tenantNames[i]);
+    }
+    for(var c=0;c<2;c++){
+      namesHTML+='<div style="display:flex;flex-direction:column;gap:0.2mm">';
+      for(var j=0;j<cols[c].length;j++){
+        var idx=c===0?j:3+j;
+        namesHTML+='<div class="tenant-item"><span class="num-badge">'+(idx+1)+'</span>'+escapeHtml(cols[c][j])+'</div>';
+      }
+      if(c===1){
+        namesHTML+='<div class="until-grid-item">📅 مستأجر حتى: '+escapeHtml(b.endDate)+'</div>';
+      }
+      namesHTML+='</div>';
+    }
+  }else{
+    namesHTML='<div class="until-grid-item" style="grid-column:1/-1;text-align:center">📅 مستأجر حتى: '+escapeHtml(b.endDate)+'</div>';
+  }
+  var cardHTML='<div class="card-page" id="cardPage">'
+    +'<div class="card-head"><div class="office-name">قرية شاطئ الشروق</div></div>'
+    +'<div class="card-body">'
+    +'<div class="info-row"><span class="lbl">📞 الهاتف</span><span class="val" style="direction:ltr">'+escapeHtml(b.tenantPhone)+'</span></div>'
+    +'<div class="info-row"><span class="lbl">🏠 الوحدة</span><span class="val">'+escapeHtml(b.unitType)+' — '+escapeHtml(b.unitNum)+'</span></div>'
+    +'<div class="owner-row"><span class="lbl">👤 المؤجر</span><span class="val">'+escapeHtml(b.ownerName)+'</span></div>'
+    +'<div class="tenant-grid">'+namesHTML+'</div>'
+    +'</div>'
+    +'</div>';
+  document.getElementById('cardPreviewArea').innerHTML=cardHTML;
+  document.getElementById('printCardArea').innerHTML=cardHTML;
+  document.getElementById('cardModal').classList.add('open');
+}
+function closeCardModal(){
+  document.getElementById('cardModal').classList.remove('open');
+}
+function printCard(){
+  window.print();
+}
+async function goToday(){
+  const today=new Date().toISOString().slice(0,10);
+  document.getElementById('logDatePicker').value=today;
+  renderDayLog();
+}
+async function renderDayLog(){
+  const date=document.getElementById('logDatePicker').value;
+  if(!date)return;
+  const dayBks=bookings.filter(function(b){return b.createdAt===date||(!b.createdAt&&b.startDate===date);});
+  const totalBks=dayBks.length;
+  var totalForms=0,totalCards=0,totalExtra=0,totalPrice=0;
+  var detailsRows='';
+  dayBks.forEach(function(b,i){
+    var tn=b.tenantCount||(b.tenantNames?b.tenantNames.length:0);
+    var baseCards=Math.ceil(tn/5);
+    var extra=b.extraCards||0;
+    var cards=baseCards+extra;
+    var forms=1;
+    var price=forms*250+cards*160;
+    totalForms+=forms;totalCards+=cards;totalExtra+=extra;totalPrice+=price;
+    var bc=b.unitType==='فيلا'?'badge-villa':b.unitType==='شاليه'?'badge-chalet':'badge-apt';
+    var idx=i+1;
+    detailsRows+='<tr>'
+      +'<td>'+idx+'</td>'
+      +'<td><span class="unit-badge '+bc+'">'+b.unitType+'</span></td>'
+      +'<td><strong>'+escapeHtml(b.unitNum)+'</strong></td>'
+      +'<td>'+escapeHtml(b.ownerName)+'</td>'
+      +'<td class="num-cell">'+tn+'</td>'
+      +'<td class="num-cell">'+forms+'</td>'
+      +'<td class="num-cell">'+baseCards+'</td>'
+      +'<td class="num-cell">'+extra+'</td>'
+      +'<td class="num-cell">'+cards+'</td>'
+      +'<td class="price-cell">'+price.toLocaleString('ar-EG')+' ج.م</td>'
+      +'<td><button class="btn-dl" onclick=\'dlBook("'+b.id+'")\' title="تحميل">⬇️</button> <button class="btn-card" onclick="showPrintCard(\''+b.id+'\')" title="طباعة كارنية">🪪</button></td>'
+      +'</tr>';
+  });
+  var statsHTML=''
+    +'<div class="daily-stat"><div class="stat-num">'+totalBks+'</div><div class="stat-lbl">📋 الحجوزات</div></div>'
+    +'<div class="daily-stat gold"><div class="stat-num">'+totalForms+'</div><div class="stat-lbl">📄 الاستمارات</div></div>'
+    +'<div class="daily-stat purple"><div class="stat-num">'+totalCards+'</div><div class="stat-lbl">🪪 الكارنيهات</div></div>'
+    +'<div class="daily-stat green"><div class="stat-num">'+(totalBks>0?Math.round(totalPrice/totalBks):0)+'</div><div class="stat-lbl">💰 متوسط الحجز</div></div>';
+  var tableHTML='';
+  if(dayBks.length){
+    tableHTML='<div class="daily-table-wrap">'
+      +'<table><thead><tr><th>#</th><th>النوع</th><th>الوحدة</th><th>المؤجر</th><th>عدد المستأجرين</th><th>استمارات</th><th>كارنيهات (تلقائي)</th><th>إضافي</th><th>إجمالي الكارنيهات</th><th>السعر</th><th></th></tr></thead><tbody>'
+      +detailsRows
+      +'</tbody></table></div>'
+      +'<div class="daily-total-box">'
+      +'<div class="total-item"><div class="lbl">إجمالي الاستمارات</div><div class="val">'+totalForms+'</div></div>'
+      +'<div class="total-item"><div class="lbl">إجمالي الكارنيهات</div><div class="val">'+totalCards+'</div></div>'
+      +'<div class="total-item"><div class="lbl">سعر الاستمارة</div><div class="val" style="font-size:1rem;opacity:.85">250 ج.م</div></div>'
+      +'<div class="total-item"><div class="lbl">سعر الكارنية</div><div class="val" style="font-size:1rem;opacity:.85">160 ج.م</div></div>'
+      +'<div class="total-item"><div class="lbl">📦 الإجمالي الكلي</div><div class="val gold">'+totalPrice.toLocaleString('ar-EG')+' ج.م</div></div>'
+      +'</div>';
+  }else{
+    tableHTML='<div class="no-records" style="padding:20px">لا توجد حجوزات في هذا اليوم</div>';
+  }
+  document.getElementById('dailyStatsArea').innerHTML=statsHTML;
+  document.getElementById('dailyDetails').innerHTML=tableHTML;
+  var entries=await apiGet('/daylog/'+date)||[];
+  var area=document.getElementById('dayLogArea');
+  if(!entries.length){area.innerHTML='<div class="no-records">لا توجد ملاحظات</div>';}
+  else{
+    area.innerHTML=entries.map(function(e,i){
+      return '<div class="day-entry">'
+        +'<div class="day-entry-time">'+e.time+'</div>'
+        +'<div class="day-entry-text">'+escapeHtml(e.text)+'</div>'
+        +'<button class="day-entry-del" onclick="deleteDayEntry(\''+date+'\','+i+')" title="حذف">✕</button>'
+        +'</div>';
+    }).join('');
+  }
+}
+async function addDayEntry(){
+  const date=document.getElementById('logDatePicker').value;
+  const text=document.getElementById('newEntryText').value.trim();
+  if(!date||!text){showToast('⚠️ اختر تاريخاً وأدخل نصاً',true);return;}
+  const entries=await apiGet('/daylog/'+date)||[];
+  const now=new Date();
+  const time=now.toLocaleTimeString('ar-EG',{hour:'2-digit',minute:'2-digit'});
+  await apiPost('/daylog/'+date,{entry:{text,time,by:currentUser},idx:entries.length});
+  document.getElementById('newEntryText').value='';
+  renderDayLog();
+  showToast('✅ تمت الإضافة');
+}
+async function deleteDayEntry(date,idx){
+  if(!confirm('حذف هذا القيد؟'))return;
+  await apiDel('/daylog/'+date+'/'+idx);
+  renderDayLog();
+}
+
+// ===== ADMIN =====
+function buildAdminStats(){
+  const total=bookings.length;
+  const villas=bookings.filter(function(b){return b.unitType==='فيلا';}).length;
+  const chalets=bookings.filter(function(b){return b.unitType==='شاليه';}).length;
+  const apts=bookings.filter(function(b){return b.unitType==='شقة';}).length;
+  const tenants=bookings.reduce(function(s,b){return s+(b.tenantNames?.length||0);},0);
+  document.getElementById('adminStats').innerHTML=''
+    +'<div class="stat-card"><div class="stat-num">'+total+'</div><div class="stat-lbl">إجمالي الحجوزات</div></div>'
+    +'<div class="stat-card gold"><div class="stat-num">'+villas+'</div><div class="stat-lbl">فيلات</div></div>'
+    +'<div class="stat-card green"><div class="stat-num">'+chalets+'</div><div class="stat-lbl">شاليهات</div></div>'
+    +'<div class="stat-card"><div class="stat-num">'+apts+'</div><div class="stat-lbl">شقق</div></div>'
+    +'<div class="stat-card gold"><div class="stat-num">'+staffList.length+'</div><div class="stat-lbl">موظفون</div></div>'
+    +'<div class="stat-card green"><div class="stat-num">'+tenants+'</div><div class="stat-lbl">مستأجرون</div></div>';
+}
+
+function renderAdminStaff(){
+  const sl=document.getElementById('staffList');
+  if(!staffList.length){sl.innerHTML='<div class="no-records">لا يوجد موظفون مسجلون</div>';return;}
+  sl.innerHTML=staffList.map(function(s,i){
+    return '<div class="staff-item">'
+      +'<div class="staff-info"><strong>👷 '+escapeHtml(s.name)+'</strong><span>المستخدم: '+escapeHtml(s.username)+'</span></div>'
+      +'<div class="staff-actions">'
+      +'<button class="btn-edit-pw" onclick="openPwModal('+i+')">🔑 تغيير كلمة المرور</button>'
+      +'<button class="btn-del-staff" onclick="deleteStaff('+i+')">🗑️ حذف</button>'
+      +'</div></div>';
+  }).join('');
+}
+
+async function addStaff(){
+  const user=document.getElementById('newStaffUser').value.trim();
+  const pass=document.getElementById('newStaffPass').value.trim();
+  const name=document.getElementById('newStaffName').value.trim();
+  if(!user||!pass||!name){showToast('⚠️ أدخل جميع بيانات الموظف',true);return;}
+  try {
+    const list = await apiPost('/staff',{username:user,password:pass,name});
+    staffList = list;
+    document.getElementById('newStaffUser').value='';
+    document.getElementById('newStaffPass').value='';
+    document.getElementById('newStaffName').value='';
+    renderAdminStaff();buildAdminStats();
+    showToast('✅ تمت إضافة الموظف: '+name);
+  } catch(e) {
+    showToast('⚠️ اسم المستخدم موجود بالفعل',true);
+  }
+}
+
+async function deleteStaff(i){
+  if(!confirm('حذف حساب الموظف "'+staffList[i].name+'"؟'))return;
+  await apiDel('/staff/'+staffList[i].id);
+  staffList = await apiGet('/staff') || [];
+  renderAdminStaff();buildAdminStats();
+  showToast('🗑️ تم حذف الحساب');
+}
+
+let editStaffIdx=-1;
+function openPwModal(i){
+  editStaffIdx=i;
+  document.getElementById('modalStaffUser').value=staffList[i].username;
+  document.getElementById('modalNewPw').value='';
+  document.getElementById('pwModal').classList.add('open');
+}
+function closePwModal(){document.getElementById('pwModal').classList.remove('open');}
+async function saveStaffPw(){
+  const pw=document.getElementById('modalNewPw').value.trim();
+  if(!pw){showToast('⚠️ أدخل كلمة مرور',true);return;}
+  await apiPut('/staff/'+staffList[editStaffIdx].id+'/pw',{password:pw});
+  closePwModal();
+  showToast('✅ تم تغيير كلمة المرور');
+}
+
+async function changeAdminPw(){
+  const pw=document.getElementById('newAdminPw').value.trim();
+  if(!pw){showToast('⚠️ أدخل كلمة مرور جديدة',true);return;}
+  adminCreds.pass=pw;await apiPost('/settings/admin',adminCreds);
+  document.getElementById('newAdminPw').value='';
+  showToast('✅ تم تغيير كلمة مرور المدير');
+}
+
+function renderAdminRecords(){
+  const c=document.getElementById('adminRecords');
+  if(!bookings.length){c.innerHTML='<div class="no-records">لا توجد حجوزات</div>';return;}
+  const rows=bookings.map(function(b){
+    const bc=b.unitType==='فيلا'?'badge-villa':b.unitType==='شاليه'?'badge-chalet':'badge-apt';
+    return '<tr><td><span class="unit-badge '+bc+'">'+b.unitType+'</span></td><td><strong>'+escapeHtml(b.unitNum)+'</strong></td><td>'+escapeHtml(b.ownerName)+'</td><td>'+b.bookingDate+'</td><td style="font-size:.76rem">'+(b.registeredBy||'—')+'</td><td style="white-space:nowrap"><button class="btn-dl" onclick=\'dlBook("'+b.id+'")\'>⬇️</button> <button class="btn-card" onclick="showPrintCard(\''+b.id+'\')">🪪</button> <button class="btn-del" onclick="deleteBooking(\''+b.id+'\')">🗑️</button></td></tr>';
+  }).join('');
+  c.innerHTML='<div style="overflow-x:auto"><table><thead><tr><th>النوع</th><th>الوحدة</th><th>المؤجر</th><th>تاريخ التسجيل</th><th>بواسطة</th><th>إجراء</th></tr></thead><tbody>'+rows+'</tbody></table></div>';
+}
+
+// ===== TOAST =====
+function showToast(msg,isErr){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.className=isErr?'error-t show':'show';
+  setTimeout(function(){t.className=isErr?'error-t':'';},3200);
+}
+</script>
+</body>
+</html>
